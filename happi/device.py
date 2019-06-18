@@ -61,11 +61,13 @@ class EntryInfo(object):
             my_field = EntryInfo('My generated field')
             number   = EntryInfo('Device number', enforce=int, default=0)
     """
-    def __init__(self, doc=None, optional=True, enforce=None, default=None):
+    def __init__(self, doc=None, optional=True, enforce=None, default=None,
+                 unique=False):
         self.key = None  # Set later by parent class
         self.doc = doc
         self.enforce = enforce
         self.optional = optional
+        self.unique = unique
 
         # Explicitly set default to None b/c this is how we ensure mandatory
         # information was set
@@ -251,7 +253,7 @@ class HappiItem(metaclass=InfoMeta):
                      )
     """
     name = EntryInfo('Shorthand name for the device',
-                     optional=False, enforce=str)
+                     optional=False, enforce=str, unique=True)
     device_class = EntryInfo("Python class that represents the Device",
                              enforce=str)
     args = EntryInfo("Arguments to pass to device_class",
@@ -365,7 +367,7 @@ class Device(HappiItem):
     device as well as various
     """
     prefix = EntryInfo('A base PV for all related records',
-                       optional=False, enforce=str)
+                       optional=False, enforce=str, unique=True)
     beamline = EntryInfo('Section of beamline the device belongs',
                          optional=False, enforce=str)
     z = EntryInfo('Beamline position of the device',
