@@ -161,6 +161,8 @@ class Client:
             specified or there is already a device with that ``id`` in the
             database
         """
+        # Store original client:
+        device._client = self
         logger.info("Storing device %r ...", device)
         # Store post
         self._store(device, insert=True)
@@ -203,6 +205,8 @@ class Client:
 
         # Add the save method to the device
         device.save = lambda: self._store(device, insert=False)
+        # Store the client
+        device._client = self
         return device
 
     def load_device(self, use_cache=True, **post):
